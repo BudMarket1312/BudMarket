@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUXE SALT</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <a href="#home" class="logo">LUXE<span>SALT</span></a>
+
+  <nav>
+    <a href="#home">Начало</a>
+    <a href="#shop">Магазин</a>
+    <a href="#about">За нас</a>
+    <a href="#contact">Контакти</a>
+  </nav>
+
+  <button class="cart-button" onclick="openCart()">
+    Кошница <span id="cart-count">0</span>
+  </button>
+</header>
+
+
+<section id="home" class="hero">
+
+  <div class="hero-text">
+    <p class="eyebrow">THE PRIVATE COLLECTION</p>
+
+    <h1>
+      Изключителна сол.
+      <i>Без компромис.</i>
+    </h1>
+
+    <p>
+      Премиум селекция за хора, които ценят
+      редките продукти и вниманието към детайла.
+    </p>
+
+    <a href="#shop" class="gold-button">
+      Разгледай колекцията
+    </a>
+  </div>
+
+  <div class="hero-photo">
+    <span>ТВОЯ СНИМКА</span>
+  </div>
+
+</section>
+
+
+<div class="delivery-notice">
+  <span>●</span>
+  ЛИЧНИ ДОСТАВКИ САМО В СОФИЯ
+</div>
+
+
+<section id="shop" class="shop">
+
+  <div class="section-title">
+    <div>
+      <p class="eyebrow">THE COLLECTION</p>
+      <h2>Колекцията</h2>
+    </div>
+
+    <p>
+      Избери своята разфасовка и добави продукта
+      в кошницата.
+    </p>
+  </div>
+
+
+  <div class="products">
+
+    <article class="product">
+
+      <div class="product-image">
+        СНИМКА НА СОЛТА
+      </div>
+
+      <div class="product-info">
+
+        <p class="eyebrow">SIGNATURE</p>
+
+        <h3>Premium Salt</h3>
+
+        <p class="description">
+          Специална премиум сол.
+        </p>
+
+        <label>
+          Разфасовка
+
+          <select id="salt-weight">
+
+            <option value="50" data-price="49">
+              50 g — 49 лв.
+            </option>
+
+            <option value="100" data-price="89">
+              100 g — 89 лв.
+            </option>
+
+            <option value="250" data-price="199">
+              250 g — 199 лв.
+            </option>
+
+            <option value="500" data-price="349">
+              500 g — 349 лв.
+            </option>
+
+            <option value="1000" data-price="599">
+              1 kg — 599 лв.
+            </option>
+
+          </select>
+        </label>
+
+        <label>
+          Количество
+
+          <input
+            id="salt-quantity"
+            type="number"
+            value="1"
+            min="1"
+          >
+        </label>
+
+        <button
+          class="dark-button"
+          onclick="addSalt()"
+        >
+          Добави в кошницата
+        </button>
+
+      </div>
+
+    </article>
+
+
+    <article class="product">
+
+      <div class="product-image">
+        СНИМКА НА ЗАПАЛКА
+      </div>
+
+      <div class="product-info">
+
+        <p class="eyebrow">ACCESSORY</p>
+
+        <h3>Luxury Lighter</h3>
+
+        <p class="description">
+          Тук добави описание на запалката.
+        </p>
+
+        <div class="accessory-price">
+          000 лв.
+        </div>
+
+        <button
+          class="dark-button"
+          onclick="addLighter()"
+        >
+          Добави в кошницата
+        </button>
+
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<section id="about" class="about">
+
+  <div>
+    <p class="eyebrow">THE BRAND</p>
+
+    <h2>
+      По-малко.
+      <br>
+      По-добре.
+      <br>
+      По-специално.
+    </h2>
+  </div>
+
+  <div>
+    <p>
+      Тук добави историята на твоя бранд, произхода
+      на продукта и причината, поради която е
+      специален.
+    </p>
+  </div>
+
+</section>
+
+
+<section id="contact" class="contact">
+
+  <p class="eyebrow">CONTACT</p>
+
+  <h2>Контакти</h2>
+
+  <p>
+    Телефон: +359 XXX XXX XXX
+  </p>
+
+  <p>
+    Instagram: @yourbrand
+  </p>
+
+</section>
+
+
+<footer>
+
+  <strong>LUXE<span>SALT</span></strong>
+
+  <small>
+    © 2026 LUXESALT
+  </small>
+
+</footer>
+
+
+<!-- КОШНИЦА -->
+
+<div id="cart-overlay" class="overlay">
+
+  <div class="cart">
+
+    <button
+      class="close"
+      onclick="closeCart()"
+    >
+      ×
+    </button>
+
+    <p class="eyebrow">YOUR ORDER</p>
+
+    <h2>Кошница</h2>
+
+    <div id="cart-items"></div>
+
+    <div class="total">
+
+      <span>Общо</span>
+
+      <strong id="cart-total">
+        0 лв.
+      </strong>
+
+    </div>
+
+
+    <button
+      class="gold-button full"
+      onclick="showOrderForm()"
+    >
+      Продължи към поръчка
+    </button>
+
+
+    <!-- ФОРМА -->
+
+    <form
+      id="order-form"
+      class="order-form"
+      onsubmit="sendOrder(event)"
+    >
+
+      <h3>Данни за поръчката</h3>
+
+      <input
+        type="text"
+        name="name"
+        placeholder="Име"
+        required
+      >
+
+      <input
+        type="tel"
+        name="phone"
+        placeholder="Телефон"
+        required
+      >
+
+      <input
+        type="text"
+        name="location"
+        placeholder="Локация в София"
+        required
+      >
+
+      <textarea
+        name="note"
+        placeholder="Допълнителна бележка"
+      ></textarea>
+
+      <p class="small">
+        Поръчки се приемат само за София.
+        След изпращане ще се свържем с клиента
+        за потвърждение.
+      </p>
+
+      <button
+        type="submit"
+        class="dark-button full"
+      >
+        Изпрати поръчката
+      </button>
+
+    </form>
+
+
+    <div id="success" class="success"></div>
+
+  </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
