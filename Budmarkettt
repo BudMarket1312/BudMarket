@@ -1,0 +1,312 @@
+let cart = [];
+
+
+function money(number) {
+
+  return number.toLocaleString("bg-BG", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + " лв.";
+
+}
+
+
+/* ДОБАВЯНЕ НА СОЛ */
+
+function addSalt() {
+
+  const select = document.getElementById("salt-weight");
+
+  const option =
+    select.options[select.selectedIndex];
+
+  const quantity =
+    Math.max(
+      1,
+      parseInt(
+        document.getElementById("salt-quantity").value
+      ) || 1
+    );
+
+  cart.push({
+
+    name: "Premium Salt",
+
+    weight: option.value + " g",
+
+    price: Number(option.dataset.price),
+
+    quantity: quantity
+
+  });
+
+  updateCart();
+
+  openCart();
+
+}
+
+
+/* ДОБАВЯНЕ НА ЗАПАЛКА */
+
+function addLighter() {
+
+  cart.push({
+
+    name: "Luxury Lighter",
+
+    weight: "",
+
+    price: 0,
+
+    quantity: 1
+
+  });
+
+  updateCart();
+
+  openCart();
+
+}
+
+
+/* КОШНИЦА */
+
+function updateCart() {
+
+  const container =
+    document.getElementById("cart-items");
+
+  const count =
+    document.getElementById("cart-count");
+
+  const total =
+    document.getElementById("cart-total");
+
+
+  count.innerText =
+    cart.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    );
+
+
+  if (cart.length === 0) {
+
+    container.innerHTML =
+      '<p style="color:#888">Кошницата е празна.</p>';
+
+    total.innerText = "0 лв.";
+
+    return;
+
+  }
+
+
+  container.innerHTML = cart.map((item, index) => {
+
+    const itemTotal =
+      item.price * item.quantity;
+
+    return `
+
+      <div class="cart-item">
+
+        <div>
+
+          <strong>
+            ${item.name}
+          </strong>
+
+          <small>
+            ${item.weight}
+            ×
+            ${item.quantity}
+          </small>
+
+        </div>
+
+        <div>
+
+          ${
+            item.price > 0
+            ? money(itemTotal)
+            : "XXX лв."
+          }
+
+          <br>
+
+          <button
+            class="remove"
+            onclick="removeItem(${index})"
+          >
+            Премахни
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+
+  const totalPrice =
+    cart.reduce(
+      (sum, item) =>
+        sum + item.price * item.quantity,
+      0
+    );
+
+
+  total.innerText =
+    money(totalPrice);
+
+}
+
+
+function removeItem(index) {
+
+  cart.splice(index, 1);
+
+  updateCart();
+
+}
+
+
+function openCart() {
+
+  document
+    .getElementById("cart-overlay")
+    .classList.add("open");
+
+}
+
+
+function closeCart() {
+
+  document
+    .getElementById("cart-overlay")
+    .classList.remove("open");
+
+}
+
+
+function showOrderForm() {
+
+  if (cart.length === 0) {
+
+    alert(
+      "Добави продукт в кошницата."
+    );
+
+    return;
+
+  }
+
+  document
+    .getElementById("order-form")
+    .style.display = "block";
+
+}
+
+
+/* ИЗПРАЩАНЕ НА ПОРЪЧКАТА */
+
+function sendOrder(event) {
+
+  event.preventDefault();
+
+
+  const form =
+    new FormData(event.target);
+
+
+  const name =
+    form.get("name");
+
+  const phone =
+    form.get("phone");
+
+  const location =
+    form.get("location");
+
+  const note =
+    form.get("note");
+
+
+  const products =
+    cart.map(item => {
+
+      return `${item.name}
+${item.weight}
+Количество: ${item.quantity}`;
+
+    }).join("\n\n");
+
+
+  const total =
+    cart.reduce(
+      (sum, item) =>
+        sum + item.price * item.quantity,
+      0
+    );
+
+
+  document
+    .getElementById("success")
+    .style.display = "block";
+
+
+  document
+    .getElementById("success")
+    .innerHTML = `
+
+      <strong>
+        Поръчката е подготвена.
+      </strong>
+
+      <br><br>
+
+      Клиент:
+      ${name}
+
+      <br>
+
+      Телефон:
+      ${phone}
+
+      <br>
+
+      Локация:
+      ${location}
+
+      <br><br>
+
+      ${products.replace(/\n/g, "<br>")}
+
+      <br><br>
+
+      Общо:
+      ${money(total)}
+
+      <br><br>
+
+      Бележка:
+      ${note || "Няма"}
+
+      <br><br>
+
+      <small>
+        Демо версия — свържи тази форма
+        с Telegram, имейл или база данни,
+        преди да приемаш реални поръчки.
+      </small>
+
+    `;
+
+
+  event.target.style.display = "none";
+
+}
